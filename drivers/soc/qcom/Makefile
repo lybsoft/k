@@ -113,3 +113,5 @@ obj-$(CONFIG_QCOM_EARLY_RANDOM)	+= early_random.o
 obj-$(CONFIG_MSM_HAB) += hab/
 obj-$(CONFIG_QCOM_QDSS_BRIDGE) += qdss_bridge.o
 obj-$(CONFIG_STATE_NOTIFIER) += state_notifier.o
+
+obj-$(CONFIG_DIRTYSANTA_FIXUP) += dirtysanta_fixup.o
