@@ -979,3 +979,22 @@ config DIRTYSANTA_FIXUP_DEVICENAME
 	  If unset the value from the kernel parameter "model.name" will be
 	  used.  This should be the correct value, assuming the kernel
 	  command-line is correct or has been corrected somehow.
+
+config DIRTYSANTA_FIXUP_SIMCOUNT
+	int "Indicate SIM count for VENDOR0 smem area"
+	depends on DIRTYSANTA_FIXUP
+	default "0"
+	help
+	  This value is used to modify the VENDOR0 structure of the smem area.
+	  This specifies how many SIM slots should be present on the modem of
+	  the device.  Generally 1 or 2.
+
+	  If unset the value from the kernel parameter "lge.sim_num" will be
+	  used.  This should be the correct value, assuming the kernel
+	  command-line is correct or has been corrected somehow.
+
+config DIRTYSANTA_FIXUP_SYSFS
+	boolean "Include sysfs interface for DirtySanta fixup"
+	depends on DIRTYSANTA_FIXUP
+	help
+	  Include sysfs interface for DirtySanta modem fixup.

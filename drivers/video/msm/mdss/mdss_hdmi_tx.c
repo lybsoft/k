@@ -39,7 +39,7 @@
 #include <soc/qcom/lge/board_lge.h>
 #endif
 
-#ifdef CONFIG_SLIMPORT_DYNAMIC_HPD
+#if 1
 #include "mdss_hdmi_slimport.h"
 #endif
 #define DRV_NAME "hdmi-tx"
