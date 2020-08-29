@@ -1987,8 +1987,8 @@ struct wcd_cpe_core *wcd_cpe_init(const char *img_fname,
 	}
 
 	card = codec->component.card->snd_card;
-	snprintf(proc_name, sizeof(proc_name), "%s%d%s", cpe_name, id,
-		 state_name);
+	snprintf(proc_name, (sizeof("cpe") + sizeof("_state") +
+		 sizeof(id) - 2), "%s%d%s", cpe_name, id, state_name);
 	entry = snd_info_create_card_entry(card, proc_name,
 					   card->proc_root);
 	if (entry) {
@@ -2052,7 +2052,6 @@ struct wcd_cpe_core *wcd_cpe_init(const char *img_fname,
 		goto schedule_dload_work;
 	}
 
-	arch_setup_dma_ops(core->dev, 0, 0, NULL, 0);
 	core->cpe_dump_v_addr = dma_alloc_coherent(core->dev,
 						   core->hw_info.dram_size,
 						   &core->cpe_dump_addr,
@@ -3570,8 +3569,6 @@ static int wcd_cpe_lsm_lab_control(
 
 	pr_debug("%s: enter payload_size = %d Enable %d\n",
 		 __func__, pld_size, enable);
-
-	memset(&cpe_lab_enable, 0, sizeof(cpe_lab_enable));
 
 	if (fill_lsm_cmd_header_v0_inband(&cpe_lab_enable.hdr, session->id,
 		(u8) pld_size, CPE_LSM_SESSION_CMD_SET_PARAMS_V2)) {

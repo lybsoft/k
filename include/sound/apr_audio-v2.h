@@ -3389,14 +3389,7 @@ struct asm_softvolume_params {
 
 #define ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V2 0x00010DA5
 
-#if defined(CONFIG_SND_LGE_EFFECT) || defined(CONFIG_SND_LGE_NORMALIZER) || defined(CONFIG_SND_LGE_MABL)
-#define ASM_STREAM_POSTPROC_TOPO_ID_DEFAULT_LGE 0x10009009
-#define ASM_STREAM_POSTPROC_TOPO_ID_OFFLOAD_LGE 0x10009010
-#endif
-
 #define ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V3 0x00010DDC
-
-#define ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V4 0x0001320C
 
 #define ASM_MEDIA_FMT_EVRCB_FS 0x00010BEF
 
@@ -3500,56 +3493,6 @@ struct asm_multi_channel_pcm_fmt_blk_v3 {
  */
 } __packed;
 
-struct asm_multi_channel_pcm_fmt_blk_v4 {
-	uint16_t                num_channels;
-/*
- * Number of channels
- * Supported values: 1 to 8
- */
-
-	uint16_t                bits_per_sample;
-/*
- * Number of bits per sample per channel
- * Supported values: 16, 24, 32
- */
-
-	uint32_t                sample_rate;
-/*
- * Number of samples per second
- * Supported values: 2000 to 48000, 96000,192000 Hz
- */
-
-	uint16_t                is_signed;
-/* Flag that indicates that PCM samples are signed (1) */
-
-	uint16_t                sample_word_size;
-/*
- * Size in bits of the word that holds a sample of a channel.
- * Supported values: 12,24,32
- */
-
-	uint8_t                 channel_mapping[8];
-/*
- * Each element, i, in the array describes channel i inside the buffer where
- * 0 <= i < num_channels. Unused channels are set to 0.
- */
-	uint16_t                endianness;
-/*
- * Flag to indicate the endianness of the pcm sample
- * Supported values: 0 - Little endian (all other formats)
- *                   1 - Big endian (AIFF)
- */
-	uint16_t                mode;
-/*
- * Mode to provide additional info about the pcm input data.
- * Supported values: 0 - Default QFs (Q15 for 16b, Q23 for packed 24b,
- *                       Q31 for unpacked 24b or 32b)
- *                  15 - for 16 bit
- *                  23 - for 24b packed or 8.24 format
- *                  31 - for 24b unpacked or 32bit
- */
-} __packed;
-
 /*
  * Payload of the multichannel PCM configuration parameters in
  * the ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V3 media format.
@@ -3558,16 +3501,6 @@ struct asm_multi_channel_pcm_fmt_blk_param_v3 {
 	struct apr_hdr hdr;
 	struct asm_data_cmd_media_fmt_update_v2 fmt_blk;
 	struct asm_multi_channel_pcm_fmt_blk_v3 param;
-} __packed;
-
-/*
- * Payload of the multichannel PCM configuration parameters in
- * the ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V4 media format.
- */
-struct asm_multi_channel_pcm_fmt_blk_param_v4 {
-	struct apr_hdr hdr;
-	struct asm_data_cmd_media_fmt_update_v2 fmt_blk;
-	struct asm_multi_channel_pcm_fmt_blk_v4 param;
 } __packed;
 
 struct asm_stream_cmd_set_encdec_param {
@@ -3605,79 +3538,6 @@ struct asm_dec_ddp_endp_param_v2 {
 	int endp_param_value;
 } __packed;
 
-/*
- * Payload of the multichannel PCM encoder configuration parameters in
- * the ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V4 media format.
- */
-
-struct asm_multi_channel_pcm_enc_cfg_v4 {
-	struct apr_hdr hdr;
-	struct asm_stream_cmd_set_encdec_param encdec;
-	struct asm_enc_cfg_blk_param_v2 encblk;
-	uint16_t num_channels;
-	/*
-	 * Number of PCM channels.
-	 * @values
-	 * - 0 -- Native mode
-	 * - 1 -- 8 channels
-	 * Native mode indicates that encoding must be performed with the number
-	 * of channels at the input.
-	 */
-	uint16_t  bits_per_sample;
-	/*
-	 * Number of bits per sample per channel.
-	 * @values 16, 24
-	 */
-	uint32_t  sample_rate;
-	/*
-	 * Number of samples per second.
-	 * @values 0, 8000 to 48000 Hz
-	 * A value of 0 indicates the native sampling rate. Encoding is
-	 * performed at the input sampling rate.
-	 */
-	uint16_t  is_signed;
-	/*
-	 * Flag that indicates the PCM samples are signed (1). Currently, only
-	 * signed PCM samples are supported.
-	 */
-	uint16_t    sample_word_size;
-	/*
-	 * The size in bits of the word that holds a sample of a channel.
-	 * @values 16, 24, 32
-	 * 16-bit samples are always placed in 16-bit words:
-	 * sample_word_size = 1.
-	 * 24-bit samples can be placed in 32-bit words or in consecutive
-	 * 24-bit words.
-	 * - If sample_word_size = 32, 24-bit samples are placed in the
-	 * most significant 24 bits of a 32-bit word.
-	 * - If sample_word_size = 24, 24-bit samples are placed in
-	 * 24-bit words. @tablebulletend
-	 */
-	uint8_t   channel_mapping[8];
-	/*
-	 * Channel mapping array expected at the encoder output.
-	 *  Channel[i] mapping describes channel i inside the buffer, where
-	 *  0 @le i < num_channels. All valid used channels must be present at
-	 *  the beginning of the array.
-	 * If Native mode is set for the channels, this field is ignored.
-	 * @values See Section @xref{dox:PcmChannelDefs}
-	 */
-	uint16_t                endianness;
-	/*
-	 * Flag to indicate the endianness of the pcm sample
-	 * Supported values: 0 - Little endian (all other formats)
-	 *                   1 - Big endian (AIFF)
-	 */
-	uint16_t                mode;
-	/*
-	 * Mode to provide additional info about the pcm input data.
-	 * Supported values: 0 - Default QFs (Q15 for 16b, Q23 for packed 24b,
-	 *                       Q31 for unpacked 24b or 32b)
-	 *                  15 - for 16 bit
-	 *                  23 - for 24b packed or 8.24 format
-	 *                  31 - for 24b unpacked or 32bit
-	 */
-} __packed;
 
 /*
  * Payload of the multichannel PCM encoder configuration parameters in
@@ -8934,7 +8794,7 @@ struct afe_clk_set {
 	 * for enable and disable clock.
 	 *	"clk_freq_in_hz", "clk_attri", and "clk_root"
 	 *	are ignored in disable clock case.
-	 *	@valuesï¿½
+	 *	@values 
 	 *	- 0 -- Disabled
 	 *	- 1 -- Enabled  @tablebulletend
 	 */
@@ -9574,108 +9434,12 @@ struct asm_session_cmd_set_mtmx_strstr_params_v2 {
 	 */
 };
 
-/* Parameter used by #ASM_SESSION_MTMX_STRTR_MODULE_ID_AVSYNC which allows the
- * audio client choose the rendering decision that the audio DSP should use.
- */
-#define ASM_SESSION_MTMX_STRTR_PARAM_RENDER_MODE_CMD  0x00012F0D
-
-/* Indicates that rendering decision will be based on default rate
- * (session clock based rendering, device driven).
- * 1. The default session clock based rendering is inherently driven
- *    by the timing of the device.
- * 2. After the initial decision is made (first buffer after a run
- *    command), subsequent data rendering decisions are made with
- *    respect to the rate at which the device is rendering, thus deriving
- *    its timing from the device.
- * 3. While this decision making is simple, it has some inherent limitations
- *    (mentioned in the next section).
- * 4. If this API is not set, the session clock based rendering will be assumed
- *    and this will ensure that the DSP is backward compatible.
- */
-#define ASM_SESSION_MTMX_STRTR_PARAM_RENDER_DEFAULT 0
-
-/* Indicates that rendering decision will be based on local clock rate.
- * 1. In the DSP loopback/client loopback use cases (frame based
- *    inputs), the incoming data into audio DSP is time-stamped at the
- *    local clock rate (STC).
- * 2. This TS rate may match the incoming data rate or maybe different
- *    from the incoming data rate.
- * 3. Regardless, the data will be time-stamped with local STC and
- *    therefore, the client is recommended to set this mode for these
- *    use cases. This method is inherently more robust to sequencing
- *    (AFE Start/Stop) and device switches, among other benefits.
- * 4. This API will inform the DSP to compare every incoming buffer TS
- *    against local STC.
- * 5. DSP will continue to honor render windows APIs, as before.
- */
-#define ASM_SESSION_MTMX_STRTR_PARAM_RENDER_LOCAL_STC 1
-
-/* Structure for rendering decision parameter */
-struct asm_session_mtmx_strtr_param_render_mode_t {
-	/* Specifies the type of rendering decision the audio DSP should use.
-	 *
-	 * @values
-	 * - #ASM_SESSION_MTMX_STRTR_PARAM_RENDER_DEFAULT
-	 * - #ASM_SESSION_MTMX_STRTR_PARAM_RENDER_LOCAL_STC
-	 */
-	u32                  flags;
-} __packed;
-
-/* Parameter used by #ASM_SESSION_MTMX_STRTR_MODULE_ID_AVSYNC which allows the
- * audio client to specify the clock recovery mechanism that the audio DSP
- * should use.
- */
-
-#define ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC_CMD 0x00012F0E
-
-/* Indicates that default clock recovery will be used (no clock recovery).
- * If the client wishes that no clock recovery be done, the client can
- * choose this. This means that no attempt will made by the DSP to try and
- * match the rates of the input and output audio.
- */
-#define ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC_NONE 0
-
-/* Indicates that independent clock recovery needs to be used.
- * 1. In the DSP loopback/client loopback use cases (frame based inputs),
- *    the client should choose the independent clock recovery option.
- * 2. This basically de-couples the audio and video from knowing each others
- *    clock sources and lets the audio DSP independently rate match the input
- *    and output rates.
- * 3. After drift detection, the drift correction is achieved by either pulling
- *    the PLLs (if applicable) or by stream to device rate matching
- *    (for PCM use cases) by comparing drift with respect to STC.
- * 4. For passthrough use cases, since the PLL pulling is the only option,
- *    a best effort will be made.
- *    If PLL pulling is not possible / available, the rendering will be
- *    done without rate matching.
- */
-#define ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC_AUTO 1
-
-/* Payload of the #ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC parameter.
- */
-struct asm_session_mtmx_strtr_param_clk_rec_t {
-	/* Specifies the type of clock recovery that the audio DSP should
-	 * use for rate matching.
-	 */
-
-	/* @values
-	 * #ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC_DEFAULT
-	 * #ASM_SESSION_MTMX_STRTR_PARAM_CLK_REC_INDEPENDENT
-	 */
-	u32                  flags;
-} __packed;
-
-union asm_session_mtmx_strtr_param_config {
-	struct asm_session_mtmx_strtr_param_window_v2_t window_param;
-	struct asm_session_mtmx_strtr_param_render_mode_t render_param;
-	struct asm_session_mtmx_strtr_param_clk_rec_t clk_rec_param;
-} __packed;
-
 struct asm_mtmx_strtr_params {
 	struct apr_hdr  hdr;
 	struct asm_session_cmd_set_mtmx_strstr_params_v2 param;
 	struct asm_stream_param_data_v2 data;
-	union asm_session_mtmx_strtr_param_config config;
+	u32 window_lsw;
+	u32 window_msw;
 } __packed;
 
 #define ASM_SESSION_CMD_GET_MTMX_STRTR_PARAMS_V2 0x00010DCF

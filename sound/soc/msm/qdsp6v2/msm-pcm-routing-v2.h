@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -13,12 +13,6 @@
 #define _MSM_PCM_ROUTING_H
 #include <sound/apr_audio-v2.h>
 
-/*
- * These names are used by HAL to specify the BE. If any changes are
- * made to the string names or the max name length corresponding
- * changes need to be made in the HAL to ensure they still match.
- */
-#define LPASS_BE_NAME_MAX_LENGTH 24
 #define LPASS_BE_PRI_I2S_RX "PRIMARY_I2S_RX"
 #define LPASS_BE_PRI_I2S_TX "PRIMARY_I2S_TX"
 #define LPASS_BE_SLIMBUS_0_RX "SLIMBUS_0_RX"
@@ -52,10 +46,8 @@
 #define LPASS_BE_SEC_MI2S_TX "SEC_MI2S_TX"
 #define LPASS_BE_PRI_MI2S_RX "PRI_MI2S_RX"
 #define LPASS_BE_PRI_MI2S_TX "PRI_MI2S_TX"
-#define LPASS_BE_TERT_MI2S_RX "TERT_MI2S_RX"
-#define LPASS_BE_TERT_MI2S_TX "TERT_MI2S_TX"
-//#define LPASS_BE_TERT_MI2S_TX "TERTIARY_MI2S_TX"
-//#define LPASS_BE_TERT_MI2S_RX "TERTIARY_MI2S_RX"
+#define LPASS_BE_TERT_MI2S_RX "TERTIARY_MI2S_RX"
+#define LPASS_BE_TERT_MI2S_TX "TERTIARY_MI2S_TX"
 #define LPASS_BE_AUDIO_I2S_RX "AUDIO_I2S_RX"
 #define LPASS_BE_STUB_RX "STUB_RX"
 #define LPASS_BE_STUB_TX "STUB_TX"
@@ -337,7 +329,6 @@ enum {
 #define INVALID_SESSION -1
 #define SESSION_TYPE_RX 0
 #define SESSION_TYPE_TX 1
-#define MAX_SESSION_TYPES 2
 #define INT_RX_VOL_MAX_STEPS 0x2000
 #define INT_RX_VOL_GAIN 0x2000
 
@@ -423,8 +414,4 @@ void msm_pcm_routing_reg_stream_app_type_cfg(int fedai_id, int app_type,
 			int acdb_dev_id, int sample_rate, int session_type);
 int msm_pcm_routing_get_stream_app_type_cfg(int fedai_id, int session_type,
 			int *app_type, int *acdb_dev_id, int *sample_rate);
-int msm_pcm_routing_send_chmix_cfg(int fe_id, int ip_channel_cnt,
-				int op_channel_cnt, int *ch_wght_coeff,
-				int session_type, bool use_default_chmap,
-				char *channel_map);
 #endif /*_MSM_PCM_H*/

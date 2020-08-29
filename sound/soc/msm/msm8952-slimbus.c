@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015-2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -90,10 +90,10 @@ static int slim0_rx_sample_rate = SAMPLING_RATE_48KHZ;
 static int slim0_tx_sample_rate = SAMPLING_RATE_48KHZ;
 static int slim1_tx_sample_rate = SAMPLING_RATE_48KHZ;
 static int slim2_tx_sample_rate = SAMPLING_RATE_48KHZ;
-static int slim0_rx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
-static int slim0_tx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
-static int slim1_tx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
-static int slim2_tx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
+static int slim0_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
+static int slim0_tx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
+static int slim1_tx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
+static int slim2_tx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 static int msm_slim_0_rx_ch = 1;
 static int msm_slim_0_tx_ch = 1;
 static int msm_slim_1_tx_ch = 1;
@@ -102,12 +102,12 @@ static int msm_vi_feed_tx_ch = 2;
 static int msm_slim_5_rx_ch = 1;
 static int msm_slim_6_rx_ch = 1;
 static int slim5_rx_sample_rate = SAMPLING_RATE_48KHZ;
-static int slim5_rx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
+static int slim5_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 static int slim6_rx_sample_rate = SAMPLING_RATE_48KHZ;
-static int slim6_rx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
+static int slim6_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 static int msm8952_auxpcm_rate = SAMPLING_RATE_8KHZ;
 static int slim4_rx_sample_rate = SAMPLING_RATE_48KHZ;
-static int slim4_rx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
+static int slim4_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 static int msm_slim_4_rx_ch = 1;
 static int msm_btsco_rate = SAMPLING_RATE_8KHZ;
 static int msm_btsco_ch = 1;
@@ -115,7 +115,7 @@ static int msm8952_spk_control = 1;
 
 static bool codec_reg_done;
 
-static int mi2s_rx_bit_format = SNDRV_PCM_FORMAT_S24_LE;
+static int mi2s_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 
 static int msm_proxy_rx_ch = 2;
 static void *adsp_state_notifier;
@@ -1042,9 +1042,6 @@ static int slim0_tx_bit_format_get(struct snd_kcontrol *kcontrol,
 			struct snd_ctl_elem_value *ucontrol)
 {
 	switch (slim0_tx_bit_format) {
-	case SNDRV_PCM_FORMAT_S32_LE:
-		ucontrol->value.integer.value[0] = 3;
-		break;
 	case SNDRV_PCM_FORMAT_S24_3LE:
 		ucontrol->value.integer.value[0] = 2;
 		break;
@@ -1068,9 +1065,6 @@ static int slim0_tx_bit_format_put(struct snd_kcontrol *kcontrol,
 	int rc = 0;
 
 	switch (ucontrol->value.integer.value[0]) {
-	case 3:
-		slim0_tx_bit_format = SNDRV_PCM_FORMAT_S32_LE;
-		break;
 	case 2:
 		slim0_tx_bit_format = SNDRV_PCM_FORMAT_S24_3LE;
 		break;
@@ -1805,8 +1799,7 @@ static const char *const slim4_tx_ch_text[] = {"One", "Two", "Three", "Four",
 						"Five", "Six", "Seven",
 						"Eight"};
 static const char *const vi_feed_ch_text[] = {"One", "Two"};
-static char const *rx_bit_format_text[] = {"S16_LE", "S24_LE", "S24_3LE",
-								"S32_LE"};
+static char const *rx_bit_format_text[] = {"S16_LE", "S24_LE", "S24_3LE"};
 static char const *slim0_rx_sample_rate_text[] = {"KHZ_48", "KHZ_96",
 	"KHZ_192", "KHZ_44P1", "KHZ_16"};
 static char const *slim4_rx_sample_rate_text[] = {"KHZ_48", "KHZ_96",
@@ -3166,6 +3159,22 @@ int msm_tdm_startup(struct snd_pcm_substream *substream)
 			val = ioread32(pdata->vaddr_gpio_mux_quin_ctl);
 			val = val | 0x00000001;
 			iowrite32(val, pdata->vaddr_gpio_mux_quin_ctl);
+		} else {
+			return -EINVAL;
+		}
+
+		if (pdata->vaddr_gpio_mux_mic_ext_clk_ctl) {
+			val = ioread32(pdata->vaddr_gpio_mux_mic_ext_clk_ctl);
+			val = val | 0x00000001;
+			iowrite32(val, pdata->vaddr_gpio_mux_mic_ext_clk_ctl);
+		} else {
+			return -EINVAL;
+		}
+
+		if (pdata->vaddr_gpio_mux_sec_tlmm_ctl) {
+			val = ioread32(pdata->vaddr_gpio_mux_sec_tlmm_ctl);
+			val = val | 0x00000002;
+			iowrite32(val, pdata->vaddr_gpio_mux_sec_tlmm_ctl);
 		} else {
 			return -EINVAL;
 		}

@@ -103,7 +103,6 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_TAS5086 if I2C
 	select SND_SOC_ES9018 if I2C
 	select SND_SOC_ES9218P if I2C
-	select SND_SOC_TFA9872 if I2C
 	select SND_SOC_TLV320AIC23_I2C if I2C
 	select SND_SOC_TLV320AIC23_SPI if SPI_MASTER
 	select SND_SOC_TLV320AIC26 if SPI_MASTER
@@ -578,17 +577,7 @@ config SND_SOC_ES9018
 	default n
 
 config SND_SOC_ES9218P
-	tristate "es9218P Hi-Fi headphones amp"
-	depends on MACH_LGE
-	default n
-
-config SND_SOC_LGE_ESS_DIGITAL_FILTER
-	tristate "Digital filter setting of ess"
-	default n
-	depends on SND_SOC_ES9218P
-
-config SND_SOC_TFA9872
-	tristate "NXP Semiconductors TFA9872 amplifier"
+        tristate "es9218P Hi-Fi headphones amp"
         depends on MACH_LGE
         default n
 
@@ -660,10 +649,6 @@ config SND_SOC_WCD9330
 config SND_SOC_WCD9335
         tristate
 
-config SND_SOC_BG_CODEC
-	tristate
-	default m if MSM_BG_GLINK=y
-
 config SND_SOC_WSA881X_SENSORS
 	tristate
 
@@ -679,10 +664,6 @@ config SND_SOC_WSA881X_ANALOG
 
 config SND_SOC_MSM8X16_WCD
 	tristate
-
-config SND_SOC_DIGITAL_CDC
-	tristate
-	select REGMAP_MMIO
 
 config SND_SOC_WCD9XXX
 	tristate
@@ -704,13 +685,6 @@ config AUDIO_EXT_CLK
 config SND_SOC_WCD_MBHC
 	tristate
 	default y if (SND_SOC_MSM8909_WCD=y || SND_SOC_MSM8X16_WCD=y || SND_SOC_WCD9335=y) && SND_SOC_MDM9650!=y
-
-config SND_SOC_WCD_DSP_MGR
-	tristate
-
-config SND_SOC_WCD_SPI
-	depends on SPI
-	tristate
 
 config SND_SOC_WL1273
 	tristate
@@ -907,12 +881,12 @@ config SND_SOC_MSM_STUB
 config SND_USE_KNOWLES_DMIC_DELAY
 	tristate "KNOWLES DMIC DELAY"
 	depends on MACH_LGE
-        default y
+	default y
 
 config SND_USE_MBHC_EXTN_CABLE
-        tristate "MBHC EXTN CABLE USECASE"
-        depends on MACH_LGE
-        default n
+	tristate "MBHC EXTN CABLE USECASE"
+	depends on MACH_LGE
+	default n
 
 config SND_SOC_MSM_HDMI_CODEC_RX
 	bool "HDMI Audio Playback"
@@ -928,8 +902,5 @@ config SND_SOC_MSM_HDMI_DBA_CODEC_RX
 config LGE_ENABLE_HDSET_FACTORY
 	bool "disable detect_extn_cable feature on factory mode"
 	default n
-
-config SOUND_CONTROL
-	bool "Sound control for wcd9335"
 
 endmenu

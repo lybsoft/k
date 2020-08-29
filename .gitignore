@@ -102,4 +102,8 @@ all.config
 android/configs/android-*.cfg
 
 build_10/
+build_10_bak/
 out/
+include/sound_bak/
+sound_bak/
+.gitignore

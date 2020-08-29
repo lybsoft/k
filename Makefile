@@ -1,3 +1,67 @@
+# we gamma now
+
+export QCOM_S820 := \
+        -march=armv8.1-a+simd+crc+crypto \
+        -mtune=cortex-a72.cortex-a53 \
+		-mabi=lp64 \
+        --param l1-cache-line-size=64 \
+        --param l1-cache-size=32 \
+        --param l2-cache-size=512 \
+
+export GRAPHTIE_FLAGS := \
+        -fgraphite-identity \
+        -floop-nest-optimize \
+        -floop-interchange \
+
+export KCFLAGS := \
+        -pipe \
+        -O3 \
+        -g0 \
+        -flto \
+        -finline-functions \
+        -fomit-frame-pointer \
+        -ftree-vectorize \
+        -ftree-slp-vectorize \
+        -fvect-cost-model \
+        -ftree-partial-pre \
+        -fweb \
+        -fgcse \
+        -fgcse-sm \
+        -fgcse-las \
+        -fgcse-after-reload \
+        -fivopts \
+        -fsection-anchors \
+        -ftree-loop-distribution \
+        -ftree-loop-distribute-patterns \
+        -ftree-loop-im \
+        -ftree-loop-if-convert \
+        -fpredictive-commoning \
+        -foptimize-register-move \
+        -fipa-cp-clone \
+        -fipa-pta \
+        -fsplit-paths \
+        $(GRAPHITE_FLAGS) \
+
+export KCFLAGS += -Wno-maybe-uninitialized
+export LDFLAGS += -O3 --hash-style=gnu --as-needed -flto
+export KCFLAGS += -Wno-misleading-indentation
+export KCFLAGS += -Wno-tautological-compare
+export KCFLAGS += -Wno-array-bounds
+export KCFLAGS += -fno-use-linker-plugin
+export KCFLAGS += -Wno-packed-not-aligned
+export KCFLAGS += -Wno-attribute-alias
+export KCFLAGS += -Wno-stringop-truncation
+export KCFLAGS += -Wno-sizeof-pointer-memaccess
+export KCFLAGS += -Wno-stringop-overflow
+export KCFLAGS += -Wno-duplicate-decl-specifier
+export KCFLAGS += -Wno-parentheses
+export KCFLAGS += -Wno-sizeof-pointer-div
+export KCFLAGS += -Wno-memset-elt-size
+export KCFLAGS += -Wno-bool-operation
+
+#
+
+
 VERSION = 3
 PATCHLEVEL = 18
 SUBLEVEL = 140
