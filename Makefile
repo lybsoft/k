@@ -14,7 +14,6 @@ export GRAPHTIE_FLAGS := \
         -floop-interchange \
 
 export KCFLAGS := \
-        -pipe \
         -O2 \
         -g0
 #        -finline-functions \
