@@ -85,6 +85,8 @@ tar xf gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
 tar xf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz
 cd ..
 
+cd $APPVEYOR_BUILD_FOLDER
+
 gaming=$2
 isg5=$3
 isoc=$4
