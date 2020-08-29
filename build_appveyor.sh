@@ -69,6 +69,22 @@
 ###################### CONFIG ######################
 
 # root directory of this kernel (this script's location)
+
+cd ~
+sudo apt install -y axel git build-essential python2 ccache lz4 zip libmpfr6
+wget http://mirrors.kernel.org/ubuntu/pool/main/m/mpfr4/libmpfr4_3.1.4-1_amd64.deb
+sudo dpkg -i libmpfr4_3.1.4-1_amd64.deb
+rm libmpfr4_3.1.4-1_amd64.deb
+
+# gcc 9.2
+mkdir 92
+cd 92
+axel -q "https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz?revision=ea238776-c7c7-43be-ba0d-40d7f594af1f&la=en&hash=2937ED76D3E6B85BA511BCBD46AE121DBA5268F3"
+axel -q "https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz?revision=64186c5d-b471-4c97-a8f5-b1b300d6594a&la=en&hash=5E9204DA5AF0B055B5B0F50C53E185FAA10FF625" > axel2
+tar xf gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+tar xf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz
+cd ..
+
 gaming=$2
 isg5=$3
 isoc=$4
@@ -100,7 +116,7 @@ if [ "$gaming" = "1" ]; then
 fi
 
 # enable ccache ?
-USE_CCACHE=no
+USE_CCACHE=yes
 
 # version number
 VER=$(cat "$RDIR/VERSION")
