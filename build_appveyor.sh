@@ -261,7 +261,7 @@ SETUP_BUILD() {
 BUILD_KERNEL() {
 	echo -e $COLOR_G"Compiling kernel..."$COLOR_N
 	TIMESTAMP1=$(date +%s)
-	while ! make -C "$RDIR" O=$BDIR -j2; do
+	while ! make -C "$RDIR" O=$BDIR -j4; do
 		read -rp "Build failed. Retry? " do_retry
 		case $do_retry in
 			Y|y) continue ;;

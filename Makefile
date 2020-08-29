@@ -1,23 +1,23 @@
 # we gamma now
 
-export QCOM_S820 := \
-        -march=armv8.1-a+simd+crc+crypto \
-        -mtune=cortex-a72.cortex-a53 \
-		-mabi=lp64 \
-        --param l1-cache-line-size=64 \
-        --param l1-cache-size=32 \
-        --param l2-cache-size=512 \
+# export QCOM_S820 := \
+#         -march=armv8.1-a+simd+crc+crypto \
+#         -mtune=cortex-a72.cortex-a53 \
+# 		-mabi=lp64 \
+#         --param l1-cache-line-size=64 \
+#         --param l1-cache-size=32 \
+#         --param l2-cache-size=512 \
 
-export GRAPHTIE_FLAGS := \
-        -fgraphite-identity \
-        -floop-nest-optimize \
-        -floop-interchange \
+# export GRAPHTIE_FLAGS := \
+#         -fgraphite-identity \
+#         -floop-nest-optimize \
+#         -floop-interchange \
 
-export KCFLAGS := \
-        -pipe \
-        -O2 \
-        -g0 \
-        -flto \
+# export KCFLAGS := \
+#         -pipe \
+#         -O2 \
+#         -g0 \
+#         -flto \
 #        -finline-functions \
 #        -fomit-frame-pointer \
 #        -ftree-vectorize \
