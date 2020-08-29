@@ -15,31 +15,31 @@ export GRAPHTIE_FLAGS := \
 
 export KCFLAGS := \
         -pipe \
-        -O3 \
+        -O2 \
         -g0 \
         -flto \
-        -finline-functions \
-        -fomit-frame-pointer \
-        -ftree-vectorize \
-        -ftree-slp-vectorize \
-        -fvect-cost-model \
-        -ftree-partial-pre \
-        -fweb \
-        -fgcse \
-        -fgcse-sm \
-        -fgcse-las \
-        -fgcse-after-reload \
-        -fivopts \
-        -fsection-anchors \
-        -ftree-loop-distribution \
-        -ftree-loop-distribute-patterns \
-        -ftree-loop-im \
-        -ftree-loop-if-convert \
-        -fpredictive-commoning \
-        -foptimize-register-move \
-        -fipa-cp-clone \
-        -fipa-pta \
-        -fsplit-paths \
+#        -finline-functions \
+#        -fomit-frame-pointer \
+#        -ftree-vectorize \
+#        -ftree-slp-vectorize \
+#        -fvect-cost-model \
+#        -ftree-partial-pre \
+#        -fweb \
+#        -fgcse \
+#        -fgcse-sm \
+#        -fgcse-las \
+#        -fgcse-after-reload \
+#        -fivopts \
+#        -fsection-anchors \
+#        -ftree-loop-distribution \
+#        -ftree-loop-distribute-patterns \
+#        -ftree-loop-im \
+#        -ftree-loop-if-convert \
+#        -fpredictive-commoning \
+#        -foptimize-register-move \
+#        -fipa-cp-clone \
+#        -fipa-pta \
+#        -fsplit-paths \
         $(GRAPHITE_FLAGS) \
 
 export KCFLAGS += -Wno-maybe-uninitialized
